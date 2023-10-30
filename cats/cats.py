@@ -5,6 +5,7 @@ from ucb import main, interact, trace
 from datetime import datetime
 
 
+
 ###########
 # Phase 1 #
 ###########
@@ -30,28 +31,39 @@ def pick(paragraphs, select, k):
     ''
     """
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    # The pick function returns the kth paragraph for which select returns True. If     no such paragraph exists (because k is too large), then pick returns the empty      string.
+
+    selected_paragraphs = [p for p in paragraphs if select(p)]
+    if k < len(selected_paragraphs):
+        return selected_paragraphs[k]
+    else:
+        return ''
+
     # END PROBLEM 1
 
-
 def about(subject):
-    """Return a select function that returns whether
-    a paragraph contains one of the words in SUBJECT.
+    def about(subject):
+        """Return a select function that returns whether
+        a paragraph contains one of the words in SUBJECT.
 
-    Arguments:
-        subject: a list of words related to a subject
+        Arguments:
+            subject: a list of words related to a subject
 
-    >>> about_dogs = about(['dog', 'dogs', 'pup', 'puppy'])
-    >>> pick(['Cute Dog!', 'That is a cat.', 'Nice pup!'], about_dogs, 0)
-    'Cute Dog!'
-    >>> pick(['Cute Dog!', 'That is a cat.', 'Nice pup.'], about_dogs, 1)
-    'Nice pup.'
-    """
-    assert all([lower(x) == x for x in subject]), 'subjects should be lowercase.'
+        >>> about_dogs = about(['dog', 'dogs', 'pup', 'puppy'])
+        >>> pick(['Cute Dog!', 'That is a cat.', 'Nice pup!'], about_dogs, 0)
+        'Cute Dog!'
+        >>> pick(['Cute Dog!', 'That is a cat.', 'Nice pup.'], about_dogs, 1)
+        'Nice pup.'
+        """
+        assert all([lower(x) == x for x in subject]), 'subjects should be lowercase.'
     # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
+    
+        def select(paragraph):
+            paragraph_words = split(remove_punctuation(lower(paragraph)))
+            return any([word in paragraph_words for word in subject])
+        return select
+    
     # END PROBLEM 2
-
 
 def accuracy(typed, source):
     """Return the accuracy (percentage of words typed correctly) of TYPED
