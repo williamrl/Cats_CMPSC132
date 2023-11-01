@@ -3,7 +3,7 @@
 from utils import lower, split, remove_punctuation, lines_from_file
 from ucb import main, interact, trace
 from datetime import datetime
-
+import string
 
 
 ###########
@@ -30,7 +30,7 @@ def pick(paragraphs, select, k):
     >>> pick(ps, s, 2)
     ''
     """
-    # BEGIN PROBLEM 1
+    # BEGIN PROBLEM 1 DONE
     # The pick function returns the kth paragraph for which select returns True. If     no such paragraph exists (because k is too large), then pick returns the empty      string.
 
     selected_paragraphs = [p for p in paragraphs if select(p)]
@@ -42,29 +42,49 @@ def pick(paragraphs, select, k):
     # END PROBLEM 1
 
 def about(subject):
-    def about(subject):
-        """Return a select function that returns whether
-        a paragraph contains one of the words in SUBJECT.
+    """Return a select function that returns whether
+    a paragraph contains one of the words in SUBJECT.
 
-        Arguments:
-            subject: a list of words related to a subject
+    Arguments:
+        subject: a list of words related to a subject
 
-        >>> about_dogs = about(['dog', 'dogs', 'pup', 'puppy'])
-        >>> pick(['Cute Dog!', 'That is a cat.', 'Nice pup!'], about_dogs, 0)
-        'Cute Dog!'
-        >>> pick(['Cute Dog!', 'That is a cat.', 'Nice pup.'], about_dogs, 1)
-        'Nice pup.'
-        """
-        assert all([lower(x) == x for x in subject]), 'subjects should be lowercase.'
-    # BEGIN PROBLEM 2
-    
-        def select(paragraph):
-            paragraph_words = split(remove_punctuation(lower(paragraph)))
-            return any([word in paragraph_words for word in subject])
-        return select
-    
+    >>> about_dogs = about(['dog', 'dogs', 'pup', 'puppy'])
+    >>> pick(['Cute Dog!', 'That is a cat.', 'Nice pup!'], about_dogs, 0)
+    'Cute Dog!'
+    >>> pick(['Cute Dog!', 'That is a cat.', 'Nice pup.'], about_dogs, 1)
+    'Nice pup.'
+    """
+    assert all([lower(x) == x for x in subject]), 'subjects should be lowercase.'
+    # BEGIN PROBLEM 2 DONE
+    def select(paragraph):
+        paragraph_words = split(remove_punctuation(lower(paragraph)))
+        return any([word in paragraph_words for word in subject])
+    return select
     # END PROBLEM 2
 
+def accuracy(typed, source):
+    """Return the accuracy (percentage of words typed correctly) of TYPED
+    when compared to the prefix of SOURCE that was typed.
+
+    Arguments:
+        typed: a string that may contain typos
+        source: a string without errors
+
+    >>> accuracy('Cute Dog!', 'Cute Dog.')
+    50.0
+    >>> accuracy('A Cute Dog!', 'Cute Dog.')
+    0.0
+    >>> accuracy('cute Dog.', 'Cute Dog.')
+    50.0
+    >>> accuracy('Cute Dog. I say!', 'Cute Dog.')
+    50.0
+    >>> accuracy('Cute', 'Cute Dog.')
+    100.0
+    >>> accuracy('', 'Cute Dog.')
+    0.0
+    >>> accuracy('', '')
+    100.0
+    """
 def accuracy(typed, source):
     """Return the accuracy (percentage of words typed correctly) of TYPED
     when compared to the prefix of SOURCE that was typed.
@@ -91,7 +111,16 @@ def accuracy(typed, source):
     typed_words = split(typed)
     source_words = split(source)
     # BEGIN PROBLEM 3
-    "*** YOUR CODE HERE ***"
+    if not typed_words:
+        return 0.0 if source_words else 100.0
+    elif not source_words:
+        return 0.0
+    else:
+        correct_words = 0
+        for i in range(min(len(typed_words), len(source_words))):
+            if typed_words[i] == source_words[i]:
+                correct_words += 1
+        return 100.0 * correct_words / len(typed_words)
     # END PROBLEM 3
 
 
